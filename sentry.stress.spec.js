@@ -37,15 +37,20 @@ for (let workerIndex = 0; workerIndex < WORKERS; workerIndex++) {
   // Keep session alive with continuous random form interactions
   const startTime = Date.now();
   while (Date.now() - startTime < DURATION) {
-    const randomUsername = `user_${Math.random().toString(36).substring(7)}`;
-    const randomPassword = `pass_${Math.random().toString(36).substring(7)}`;
-    
-    await page.fill('input[placeholder="Username"]', randomUsername);
-    await page.fill('input[placeholder="Password"]', randomPassword);
+    try {
+      const randomUsername = `user_${Math.random().toString(36).substring(7)}`;
+      const randomPassword = `pass_${Math.random().toString(36).substring(7)}`;
+      
+      await page.fill('input[placeholder="Username"]', randomUsername);
+      await page.fill('input[placeholder="Password"]', randomPassword);
 
-    await page.click('button:has-text("Login Civitas LMS")');
-    
-    await page.waitForTimeout(2000);
+      await page.click('button:has-text("Login Civitas LMS")');
+      
+      await page.waitForTimeout(2000);
+    } catch (error) {
+      // Ignore errors and continue
+      console.log('Error occurred, continuing...', error.message);
+    }
   }
   });
 }
